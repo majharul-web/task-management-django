@@ -8,3 +8,6 @@ def home(request):
 
 def show_task(request):
     return HttpResponse("Here is a list of tasks.")
+
+def show_specific_task(request, id):
+    return HttpResponse(f"Here is the task with ID: {id}")
