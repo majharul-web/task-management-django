@@ -21,5 +21,9 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-# pip install -r requirement.txt
+# create a virtual environment: python -m venv venv
+# linux venv activate: source venv/bin/activate
+# windows venv activate: venv\Scripts\activate
+# install dependencies: pip install -r requirements.txt
+# see dependencies: pip list
+# run-server: python manage.py runserver
