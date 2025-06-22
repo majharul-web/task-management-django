@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,13 +8,15 @@
 
     <title>{% block title %}{% endblock title %}</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+   
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Bengali:wght@100..900&display=swap"
       rel="stylesheet"
     />
+
+     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <style>
       body {
         font-family: "Inter", sans-serif;
@@ -23,7 +26,7 @@
 
   <body class="bg-gray-50 p-6">
     <div class="max-w-[1400px] mx-auto">
-        
+
       {% comment %} Header  {% endcomment %}
       <header class="flex justify-between items-center mb-8">
         <h1 class="text-2xl font-semibold text-blue-500">Dashboard</h1>
