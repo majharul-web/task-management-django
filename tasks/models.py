@@ -10,4 +10,16 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
    
 
+class TaskDetail(models.Model):
+    HIGH = 'H'
+    MEDIUM = 'M'
+    LOW = 'L'
     
+    PRIORITY_OPTIONS = (
+        (HIGH, 'High'),
+        (MEDIUM, 'Medium'),
+        (LOW, 'Low'),
+    )
+    task = models.OneToOneField(Task, on_delete=models.CASCADE)
+    assigned_to = models.CharField(max_length=100)
+    priority = models.CharField(max_length=2, choices=PRIORITY_OPTIONS, default=LOW)
