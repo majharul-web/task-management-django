@@ -53,3 +53,31 @@ project = Project.objects.create(name="Project 1", start_date="2024-01-01")
 allprojects = Project.objects.all()
 first_project_id = Project.objects.first().id
 ```
+
+### Create Employee and Assign to Task
+
+```python
+from tasks.models import Employee,Task
+# Create an employee
+employee1 = Employee.objects.create(name="John Doe", email="john.doe@example.com")
+employee2 = Employee.objects.create(name="Jane Smith", email="jane.smith@example.com")
+
+# create task
+task1 = Task.objects.create(title="Task 1", description="Task 1 description", due_date="2024-12-12")
+
+task1.assigned_to.add(employee1)  # Assign employee to task
+task1.assigned_to.add(employee2)  # Assign another employee to the same task
+
+task1.assigned_to.all()  # Get all employees assigned to the task
+
+# import all from tasks.models
+from tasks.models import *
+task_details = TaskDetail.objects.get(id=1) # Get a specific task detail
+task_details.task # Get the task associated with the task detail
+task_details.task.title # Get the title of the task associated with the task detail
+task1.taskdetail # Get the task detail associated with the task
+
+employee1.task_set.all()  # Get all tasks assigned to employee1
+employee2.tasks.all().first()  # Get all tasks assigned to employee2
+
+```
