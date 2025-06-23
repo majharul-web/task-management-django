@@ -40,7 +40,16 @@ instance = ModelName.objects.get(pk=1)
 ### Get & Create TaskDetails for a Task
 
 ```python
-from tasks.models import Task, TaskDetails
+from tasks.models import Task, TaskDetail
 task = Task.objects.get(id=1)
 task_details = TaskDetails.objects.create(task=task, assigned_to="John Doe", priority="H")
+```
+
+### Create Project
+
+```python
+from tasks.models import Project
+project = Project.objects.create(name="Project 1", start_date="2024-01-01")
+allprojects = Project.objects.all()
+first_project_id = Project.objects.first().id
 ```
