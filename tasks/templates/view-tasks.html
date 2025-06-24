@@ -47,6 +47,36 @@
                 <p>{{ last_task.description }}</p>
             </div>
         {% endif %}
+
+        {% comment %} Display tasks by status {% endcomment %}
+        {% if tasks_by_status %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks by Status</h2>
+            <ul class="list-inside list-disc">
+                {% for task in tasks_by_status %}
+                    <li>
+                        <strong>{{ task.title }}</strong> - {{ task.status }}
+                        <p>{{ task.description }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% comment %} Display tasks by priority {% endcomment %}
+        {% if tasks_by_priority %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks by Priority</h2>
+            <ul class="list-inside list-disc">
+                {% for task in tasks_by_priority %}
+                    <li>
+                        <strong>{{ task.task }}</strong> - {{ task.priority }}
+                        <p>{{ task.task.note }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </body>
 </html>
