@@ -81,3 +81,10 @@ employee1.task_set.all()  # Get all tasks assigned to employee1
 employee2.tasks.all().first()  # Get all tasks assigned to employee2
 
 ```
+
+### Add test data using Faker
+
+```python
+from populate_db import populate_db
+populate_db()  # This will populate the database with test data
+```
