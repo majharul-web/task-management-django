@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container mx-auto pt-10 pb-10">
-        <h1 class="text-2xl font-bold mb-4">Task List</h1>
+        <h1 class="text-2xl font-bold mb-4">Task List ({{ count_all_tasks }})</h1>
         <ul class="list-inside list-disc">
             {% for task in tasks %}
                 <li>
@@ -117,6 +117,21 @@
         {% else %}
             <h2 class="text-xl font-semibold mt-6 mb-4">Check Exists</h2>
             <p>No tasks contain 'urgent' in the title.</p>
+        {% endif %}
+
+
+        {% comment %} Display task count in each project {% endcomment %}
+        {% if task_count_in_project %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Task Count in Each Project</h2>
+            <ul class="list-inside list-disc">
+                {% for project in task_count_in_project %}
+                    <li>
+                        <strong>{{ project.name }}</strong> - {{ project.task_count }} tasks
+                    </li>
+                {% empty %}
+                    <li>No projects available.</li>
+                {% endfor %}
+            </ul>
         {% endif %}
     </div>
 </body>
