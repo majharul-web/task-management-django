@@ -77,6 +77,47 @@
                 {% endfor %}
             </ul>
         {% endif %}
+
+        {% comment %} Display tasks using AND with contains {% endcomment %}
+        {% if filter_task_using_and_contains %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks Using AND with Contains</h2>
+            <ul class="list-inside list-disc">
+                {% for task in filter_task_using_and_contains %}
+                    <li>
+                        <strong>{{ task.title }}</strong> - {{ task.status }}
+                        <p>{{ task.description }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% comment %} Display tasks using OR with contains {% endcomment %}
+        {% if filter_task_using_or %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks Using OR with Contains</h2>
+            <ul class="list-inside list-disc">
+                {% for task in filter_task_using_or %}
+                    <li>
+                        <strong>{{ task.title }}</strong> - {{ task.status }}
+                        <p>{{ task.description }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        
+
+        {% comment %} Display check if exists {% endcomment %}
+        {% if check_is_exists %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Check Exists</h2>
+            <p>There is at least one task containing 'urgent' in the title.</p>
+        {% else %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Check Exists</h2>
+            <p>No tasks contain 'urgent' in the title.</p>
+        {% endif %}
     </div>
 </body>
 </html>

@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from tasks.forms import TaskModelForm
 from tasks.models import Task,TaskDetail
 from datetime import date
+from django.db.models import Q
 
 # Create your views here.
 
@@ -36,6 +37,13 @@ def view_tasks(request):
     tasks_by_status = Task.objects.filter(status='PENDING')  # Example of filtering tasks by status
     tasks_by_due_date = Task.objects.filter(due_date=date.today())  # Example of filtering tasks by due date
     tasks_by_priority = TaskDetail.objects.exclude(priority='H')  # Example of filtering tasks by priority
+
+    # example of contains
+    filter_task_using_and_contains = Task.objects.filter(title__icontains='c',status='PENDING')  #use and using comma separated values
+    filter_task_using_or = Task.objects.filter(Q(status="IN_PROGRESS") | Q(status='PENDING'))  #use or using Q objects 
+    
+    check_is_exists = Task.objects.filter(title__icontains='urgent').exists()  # Check if any task contains 'urgent' in the title
+
     context = {
         'tasks': tasks,
         'specific_task': specific_tasks,
@@ -44,5 +52,8 @@ def view_tasks(request):
         'tasks_by_status': tasks_by_status,
         'tasks_by_due_date': tasks_by_due_date,
         'tasks_by_priority': tasks_by_priority,
+        'filter_task_using_and_contains': filter_task_using_and_contains,
+        'filter_task_using_or': filter_task_using_or,
+        'check_is_exists': check_is_exists,
     }
     return render(request, 'view-tasks.html', context)
