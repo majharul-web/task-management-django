@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskModelForm
-from tasks.models import Task,TaskDetail,Project
+from tasks.models import Task,TaskDetail,Project,Employee
 from datetime import date
 from django.db.models import Q,Count
 
@@ -28,6 +28,25 @@ def create_task(request):
         'form': form,
     }
     return render(request, 'task-form.html', context)
+
+def related_tasks(request):
+    # tasks = Task.objects.all()  
+    # tasks= Task.objects.select_related('details').all()
+    tasks= TaskDetail.objects.select_related('task').all()
+    # project_task=Task.objects.select_related('project').all()  
+    # project_task=Project.objects.select_related('tasks_set').all()  #got error
+    project_task=Project.objects.prefetch_related('task_set').all()  # Using pre
+    
+    # 
+    tasks_employee= Task.objects.prefetch_related('assigned_to').all()
+    # tasks_employee= Employee.objects.prefetch_related('tasks').all()
+
+    context = {
+        'tasks': tasks,
+        'project_task': project_task,
+        'tasks_employee': tasks_employee,
+    }
+    return render(request, 'related-tasks.html', context)
 
 def view_tasks(request):
     tasks = Task.objects.all()  # Fetch all tasks from the database

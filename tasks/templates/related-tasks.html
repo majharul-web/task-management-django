@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link rel="stylesheet" href="{% static '/css/output.css' %}">
+</head>
+<body>
+    <div class="container mx-auto pt-10 pb-10">
+        <h1 class="text-2xl font-bold mb-4">Task List</h1>
+        <ul class="list-inside list-disc">
+            {% comment %} {% for task in tasks %}
+                <li>
+                    <strong>{{ task.title }}</strong> - {{ task.status }}
+                    <p>{{ task.details.priority }}</p>
+                </li>
+            {% endfor %} {% endcomment %}
+            {% comment %} {% for task in tasks %}
+                <li>
+                    <strong>{{ task.task.title }}</strong> - {{ task.task.status }}
+                    <p>{{ task.priority }}</p>
+                </li>
+            {% endfor %} {% endcomment %}
+        </ul>
+
+        {% comment %} Display related projects {% endcomment %}
+        {% comment %} <h2 class="text-xl font-semibold mt-6">Related Projects</h2>
+        <ul class="list-inside list-disc">
+            {% for task in project_task %}
+                <li>
+                    <strong>{{ task.title }}</strong> - {{ task.status }}
+                    <p>{{ task.project.name }}</p>
+                </li>
+            {% endfor %}
+        </ul> {% endcomment %}
+        {% comment %} <h2 class="text-xl font-semibold mt-6">Related Projects</h2>
+        <ul class="list-inside list-disc">
+            {% for project in project_task %}
+                <li>
+                    <strong>{{ project.name }}</strong>
+                    {% for task in project.task_set.all %}
+                        <p>{{ task.title }} - {{ task.status }}</p>
+                    {% endfor %}
+                </li>
+            {% endfor %}
+        </ul> {% endcomment %}
+
+        {% comment %} task with employee details {% endcomment %}
+        <h2 class="text-xl font-semibold mt-6">Tasks with Employee Details</h2>
+        <ul class="list-inside list-disc">
+            {% for task in tasks_employee %}
+                <li>
+                    <strong>{{ task.title }}</strong> - {{ task.status }}
+                    <p>Priority: {{ task.details.priority }}</p>
+                    {% for employee in task.assigned_to.all %}
+                        <p>Assigned to: {{ employee.name }}</p>
+                    {% endfor %}
+                </li>
+            {% endfor %}
+        </ul> 
+
+
+         {% comment %} <h2 class="text-xl font-semibold mt-6">Tasks with Employee Details</h2>
+        <ul class="list-inside list-disc">
+            {% for employee in tasks_employee %}
+                <li>
+                    <strong>{{ employee.name }}</strong>
+                    <ul>
+                        {% for task in employee.tasks.all %}
+                            <li>{{ task.title }} - {{ task.status }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul> {% endcomment %}
+    </div>
+</body>
+</html>
