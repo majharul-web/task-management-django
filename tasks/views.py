@@ -8,7 +8,20 @@ from django.db.models import Q,Count
 # Create your views here.
 
 def manager_dashboard(request):
-    return render(request, 'dashboard/manager-dashboard.html')
+    tasks= Task.objects.all()  
+    total_task=tasks.count()  # Count all tasks
+    completed_tasks = tasks.filter(status='COMPLETED').count()  # Count completed tasks
+    pending_tasks = tasks.filter(status='PENDING').count()  # Count pending tasks
+    in_progress_tasks = tasks.filter(status='IN_PROGRESS').count()  # Count in-progress
+    
+    context = {
+        'tasks': tasks,
+        'total_task': total_task,
+        'completed_tasks': completed_tasks,
+        'pending_tasks': pending_tasks,
+        'in_progress_tasks': in_progress_tasks,
+    }
+    return render(request, 'dashboard/manager-dashboard.html',context=context)
 
 def user_dashboard(request):
     return render(request, 'dashboard/user-dashboard.html')
