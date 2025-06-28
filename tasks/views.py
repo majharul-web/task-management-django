@@ -32,7 +32,13 @@ def create_task(request):
 def related_tasks(request):
     # tasks = Task.objects.all()  
     # tasks= Task.objects.select_related('details').all()
-    tasks= TaskDetail.objects.select_related('task').all()
+    # tasks= TaskDetail.objects.select_related('task').all()
+    employee = Employee.objects.get(pk=1)
+    tasks = employee.tasks.all()
+
+    for task in tasks:
+        print(task.title, task.description, task.due_date)
+        
     # project_task=Task.objects.select_related('project').all()  
     # project_task=Project.objects.select_related('tasks_set').all()  #got error
     project_task=Project.objects.prefetch_related('task_set').all()  # Using pre
