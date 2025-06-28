@@ -6,6 +6,7 @@
   {% comment %}  Task Header  {% endcomment %}
   <div class="grid grid-cols-4 p-4 border-b border-gray-100 text-sm text-gray-500">
     <div>TASK TITLE</div>
+    <div>STATUS</div>
     <div>PRIORITY</div>
     <div>TEAM</div>
     <div>CREATED AT</div>
@@ -18,8 +19,16 @@
    <div class="grid grid-cols-4 gap-4 p-4 items-center">
       <div class="flex items-center gap-2">
         <div class="w-2 h-2 rounded-full bg-green-500"></div>
-        <span>{{ task.title }}</span>
+        <span>{{ task.title }}</span> 
+        {% if task.status == 'COMPLETED' %}
+          <span class="text-green-500">✔️</span>
+        {% elif task.status == 'IN PROGRESS' %}
+          <span class="text-yellow-500">⏳</span>
+        {% else %}
+          <span class="text-red-500">❌</span>
+        {% endif %}
       </div>
+      
       <div>
         <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-sm">{{ task.details.get_priority_display }}</span>
       </div>
