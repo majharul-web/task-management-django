@@ -4,8 +4,8 @@
 {% comment %}  Task List   {% endcomment %}
 <div class="bg-white rounded-xl shadow-sm">
   {% comment %}  Task Header  {% endcomment %}
-  <div class="grid grid-cols-4 p-4 border-b border-gray-100 text-sm text-gray-500">
-    <div>TASK TITLE</div>
+  <div class="grid grid-cols-6 p-4 border-b border-gray-100 text-sm text-gray-500">
+    <div class="col-span-2">TASK TITLE</div>
     <div>STATUS</div>
     <div>PRIORITY</div>
     <div>TEAM</div>
@@ -16,17 +16,28 @@
 
    {% for task in tasks %}
    {% comment %}  Item 1 {% endcomment %}
-   <div class="grid grid-cols-4 gap-4 p-4 items-center">
-      <div class="flex items-center gap-2">
+   <div class="grid grid-cols-6 gap-4 p-4 items-center">
+      <div class="flex items-center gap-2 col-span-2">
         <div class="w-2 h-2 rounded-full bg-green-500"></div>
-        <span>{{ task.title }}</span> 
-        {% if task.status == 'COMPLETED' %}
+         <span>{{ task.title }}</span> 
+      </div>
+      <div class="flex items-center gap-2">
+         {% if task.status == 'COMPLETED' %}
           <span class="text-green-500">✔️</span>
-        {% elif task.status == 'IN PROGRESS' %}
+        {% elif task.status == 'IN_PROGRESS' %}
           <span class="text-yellow-500">⏳</span>
         {% else %}
           <span class="text-red-500">❌</span>
         {% endif %}
+        
+        {% if task.status == 'COMPLETED' %}
+          <span class="text-green-500">Completed</span>
+        {% elif task.status == 'IN_PROGRESS' %}
+          <span class="text-yellow-500">In Progress</span>
+        {% else %}
+          <span class="text-red-500">Pending</span>
+        {% endif %}
+       
       </div>
       
       <div>
