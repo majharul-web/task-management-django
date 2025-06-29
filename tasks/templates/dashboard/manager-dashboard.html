@@ -10,6 +10,7 @@
     <div>PRIORITY</div>
     <div>TEAM</div>
     <div>CREATED AT</div>
+    {% comment %} <div>ACTIONS</div> {% endcomment %}
   </div>
   {% comment %}  Task Items   {% endcomment %}
   <div class="divide-y divide-gray-100">
@@ -52,7 +53,17 @@
           </div>
         {% endfor %}
       </div>
-      <div class="text-gray-500">{{ task.created_at|timesince }}</div>
+      <div class="text-gray-500 flex items-center gap-4">         
+        {{ task.created_at|timesince }}
+         <a href="{% url 'update-task' task.id %}" class="text-blue-500 hover:underline">Edit</a>
+          {% comment %} <form action="{% url 'update-task' task.id %}" method="POST">
+           {% csrf_token %}
+           <button type="submit" class="text-blue-500 hover:underline">Edit</button>
+         </form> {% endcomment %}
+      </div>
+      {% comment %} <div class="flex items-center gap-2">
+        <a href="{% url 'update-task' task.id %}" class="text-blue-500 hover:underline">Edit</a>
+      </div> {% endcomment %}
     </div>
    {% endfor %}
 
