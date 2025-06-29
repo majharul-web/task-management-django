@@ -85,7 +85,15 @@ def update_task(request,id):
     }
     return render(request, 'task-form.html', context)
 
-
+def delete_task(request, id):
+    task = Task.objects.get(pk=id)  # Fetch the task to be deleted
+    if request.method == 'POST':
+        task.delete()  # Delete the task
+        messages.success(request, "Task deleted successfully!")
+        return redirect('manager-dashboard')
+    else:
+        messages.error(request, "Invalid request method. Please use POST to delete a task.")
+        return redirect('manager-dashboard')  
 
 def related_tasks(request):
     # tasks = Task.objects.all()  

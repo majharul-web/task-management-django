@@ -165,6 +165,13 @@
           </a>
         </div>
 
+        {% if messages %}
+                {% for message in messages %}
+                    <div class="px-2 py-1 {% if 'success' in message.tags %}bg-green-500{% endif %} {% if 'error' in message.tags %}bg-red-500{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         {% block tasks %} {% endblock tasks %}
       </main>
       {% comment %} {% include "footer.html" %} {% endcomment %}
