@@ -5,7 +5,11 @@ from tasks.models import Task, TaskDetail
 class StyledFormMixin:
     """ Mixing to apply style to form field"""
 
-    default_classes = "border-2 border-gray-300 w-full p-3 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500"
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
+    default_classes = "border border-blue-500 w-full p-3 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500"
 
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
@@ -23,7 +27,7 @@ class StyledFormMixin:
             elif isinstance(field.widget, forms.SelectDateWidget):
                 print("Inside Date")
                 field.widget.attrs.update({
-                    "class": "border-2 border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500"
+                    "class": "border border-blue-500 p-3 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500"
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
                 print("Inside checkbox")
@@ -70,9 +74,7 @@ class TaskModelForm(StyledFormMixin, forms.ModelForm):
         #     ),
         # }
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()   
+    
 
 
 class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
@@ -81,6 +83,4 @@ class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
         fields = ['priority', 'notes']
         
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
+    
