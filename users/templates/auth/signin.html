@@ -1,19 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
-<body>
-    <h1>Welcome to Authentication System</h1>
-    <div>
-        <form method='POST'>
-            {% csrf_token %}
-            <input type="text" placeholder="Enter your username" name="username">
-            <input type="password" placeholder="Enter your password"name='password'>
-            <button type="submit">Sign In</button>
-        </form>
+<body class="bg-gray-100">
+    <div class="w-[600px] mx-auto mt-10 p-5 bg-white shadow-md rounded-lg">
+        <h1 class="text-center text-xl font-bold">Welcome to Authentication System</h1>
+        <div class="mt-5">
+            <form method='POST'>
+                {% csrf_token %}
+                <input class="form-input" type="text" placeholder="Enter your username" name="username">
+                <input class="form-input" type="password" placeholder="Enter your password"name='password'>
+                <button class="mt-5 btn-primary w-full" type="submit">Sign In</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

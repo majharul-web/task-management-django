@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md text-center">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">🏠 Welcome Home</h1>
+
+        {% if user.is_authenticated %}
+            <p class="text-lg text-gray-600 mb-4">Hello, <strong>{{ user.username }}</strong> 👋</p>
+
+            <form action="{% url 'sign-out' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <p class="text-gray-600 mb-4">You are not logged in.</p>
+            <a href="{% url 'sign-in' %}" class="btn-primary">
+                Sign In
+            </a>
+        {% endif %}
+    </div>
+
+</body>
+</html>

@@ -23,12 +23,16 @@ def sign_in(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print("Doc", username, password)
+        
         user = authenticate(request, username=username, password=password)
-        print(user)
+        print("Authenticated user:", user)
+
         if user is not None:
             login(request, user)
             return redirect('home')
+        else:
+            print("Invalid credentials")
+
     return render(request, 'auth/signin.html')
 
 

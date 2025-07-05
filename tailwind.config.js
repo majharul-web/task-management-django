@@ -4,6 +4,7 @@ module.exports = {
     "./templates/**/*.html",
     "./**/templates/**/*.html",
     "./tasks/templates/**/*.html",
+    "./users/templates/**/*.html",
     "./tasks/forms.py",
   ],
   theme: {

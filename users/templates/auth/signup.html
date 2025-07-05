@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
 <body class="bg-gray-100">
@@ -19,7 +19,7 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 {% for field in form %}
-                <p class="mb-4">
+                <p>
                         <label for="{{ field.id_for_label }}"> {{field.label}} </label>
                         {{ field }}
 
@@ -32,7 +32,7 @@
                         {% endif %}
                 </p>
                 {% endfor %}
-                <button class="mt-5 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600" type="submit">Sign Up</button>
+                <button class="mt-5 btn-primary w-full" type="submit">Sign Up</button>
             </form>
         </div>
     </div>
