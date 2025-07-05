@@ -8,3 +8,5 @@
 6. [django querysets](https://docs.djangoproject.com/en/5.2/ref/models/querysets/)
 7. [django authentication](https://docs.djangoproject.com/en/5.2/topics/auth/)
 8. [django forms validation](https://docs.djangoproject.com/en/5.2/ref/forms/validation/)
+9. [django signals](https://docs.djangoproject.com/en/5.2/topics/signals/)
+10. [django email sending](https://docs.djangoproject.com/en/5.2/topics/email/)
