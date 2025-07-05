@@ -25,17 +25,14 @@ class StyledFormMixin:
                     'rows': 5
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
-                print("Inside Date")
                 field.widget.attrs.update({
                     "class": "border border-blue-500 px-4 py-2 rounded-lg shadow-sm ring-blue-500 focus:outline-none focus:ring-2 focus:ring-opacity-50"
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
-                print("Inside checkbox")
                 field.widget.attrs.update({
                     'class': "space-y-2"
                 })
             else:
-                print("Inside else")
                 field.widget.attrs.update({
                     'class': 'form-input'
                 })
