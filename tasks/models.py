@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save,pre_save,pre_delete,post_delete
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -65,3 +67,41 @@ class Project(models.Model):
     
     def __str__(self):
         return self.name
+
+from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
+from django.dispatch import receiver
+from .models import Task  # Update with your actual import
+
+@receiver(post_save, sender=Task)
+def notify_task_creation(sender, instance, created, **kwargs):
+    print("sender:", sender)
+    print("instance:", instance)
+    print("created:", created)
+    print("kwargs:", kwargs)
+    
+    if created:
+        # Avoid recursion by using update()
+        Task.objects.filter(pk=instance.pk).update(is_completed=True)
+
+@receiver(pre_save, sender=Task)
+def notify_task_update(sender, instance, **kwargs):
+    print("sender:", sender)
+    print("instance:", instance)
+    print("kwargs:", kwargs)
+
+    if instance.pk:  # update scenario
+        instance.is_completed = True  # Just set, it will be saved
+
+@receiver(pre_delete, sender=Task)
+def notify_task_deletion(sender, instance, **kwargs):
+    print("sender:", sender)
+    print("instance:", instance)
+    print("kwargs:", kwargs)
+    # Don't save — the object is about to be deleted
+
+@receiver(post_delete, sender=Task)
+def notify_task_deleted(sender, instance, **kwargs):
+    print("sender:", sender)
+    print("instance:", instance)
+    print("kwargs:", kwargs)
+    # Don't save — the object is already deleted
