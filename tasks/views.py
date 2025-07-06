@@ -5,9 +5,18 @@ from tasks.models import Task,TaskDetail,Project,Employee
 from datetime import date
 from django.db.models import Q,Count
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 
+def is_manager(user):
+    return user.groups.filter(name='Manager').exists()
+
+def is_employee(user):
+    return user.groups.filter(name='Employee').exists()
+
+@user_passes_test(is_manager, login_url='no-permission')
 def manager_dashboard(request):
     type= request.GET.get('type', 'all')  # Get the type from query parameters, default to 'all'
     print(type)
@@ -34,10 +43,13 @@ def manager_dashboard(request):
     }
     return render(request, 'dashboard/manager-dashboard.html',context=context)
 
-def user_dashboard(request):
-    return render(request, 'dashboard/user-dashboard.html')
+@user_passes_test(is_employee, login_url='no-permission')
+def employee_dashboard(request):
+    return render(request, 'dashboard/employee-dashboard.html')
 
 
+@login_required
+@permission_required('tasks.add_task', login_url='no-permission')
 def create_task(request):
     task_form = TaskModelForm() 
     task_detail_form = TaskDetailModelForm()  
@@ -60,6 +72,8 @@ def create_task(request):
     }
     return render(request, 'task-form.html', context)
 
+@login_required
+@permission_required('tasks.change_task', login_url='no-permission')
 def update_task(request,id):
     task = Task.objects.get(pk=id)  # Fetch the task to be updated
     task_form = TaskModelForm(instance=task)
@@ -85,6 +99,8 @@ def update_task(request,id):
     }
     return render(request, 'task-form.html', context)
 
+@login_required
+@permission_required('tasks.delete_task', login_url='no-permission')
 def delete_task(request, id):
     task = Task.objects.get(pk=id)  # Fetch the task to be deleted
     if request.method == 'POST':
@@ -95,31 +111,8 @@ def delete_task(request, id):
         messages.error(request, "Invalid request method. Please use POST to delete a task.")
         return redirect('manager-dashboard')  
 
-def related_tasks(request):
-    # tasks = Task.objects.all()  
-    # tasks= Task.objects.select_related('details').all()
-    # tasks= TaskDetail.objects.select_related('task').all()
-    employee = Employee.objects.get(pk=1)
-    tasks = employee.tasks.all()
-
-    for task in tasks:
-        print(task.title, task.description, task.due_date)
-        
-    # project_task=Task.objects.select_related('project').all()  
-    # project_task=Project.objects.select_related('tasks_set').all()  #got error
-    project_task=Project.objects.prefetch_related('task_set').all()  # Using pre
-    
-    # 
-    tasks_employee= Task.objects.prefetch_related('assigned_to').all()
-    # tasks_employee= Employee.objects.prefetch_related('tasks').all()
-
-    context = {
-        'tasks': tasks,
-        'project_task': project_task,
-        'tasks_employee': tasks_employee,
-    }
-    return render(request, 'related-tasks.html', context)
-
+@login_required
+@permission_required('tasks.view_task', login_url='no-permission')
 def view_tasks(request):
     tasks = Task.objects.all()  # Fetch all tasks from the database
     count_all_tasks = Task.objects.aggregate(count=Count('id'))  # Count all tasks
@@ -153,3 +146,29 @@ def view_tasks(request):
         'task_count_in_project': task_count_in_project,
     }
     return render(request, 'view-tasks.html', context)
+
+
+def related_tasks(request):
+    # tasks = Task.objects.all()  
+    # tasks= Task.objects.select_related('details').all()
+    # tasks= TaskDetail.objects.select_related('task').all()
+    employee = Employee.objects.get(pk=1)
+    tasks = employee.tasks.all()
+
+    for task in tasks:
+        print(task.title, task.description, task.due_date)
+        
+    # project_task=Task.objects.select_related('project').all()  
+    # project_task=Project.objects.select_related('tasks_set').all()  #got error
+    project_task=Project.objects.prefetch_related('task_set').all()  # Using pre
+    
+    # 
+    tasks_employee= Task.objects.prefetch_related('assigned_to').all()
+    # tasks_employee= Employee.objects.prefetch_related('tasks').all()
+
+    context = {
+        'tasks': tasks,
+        'project_task': project_task,
+        'tasks_employee': tasks_employee,
+    }
+    return render(request, 'related-tasks.html', context)
