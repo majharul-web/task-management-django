@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
+from django.contrib.auth.models import Group
 
 @receiver(post_save, sender=User)
 def send_welcome_email(sender, instance, created, **kwargs):
@@ -23,3 +24,13 @@ def send_welcome_email(sender, instance, created, **kwargs):
 
         except Exception as e:
             print(f"Failed to send email to {instance.email}: {str(e)}")
+
+@receiver(post_save, sender=User)
+def assign_default_role(sender, instance, created, **kwargs):
+    if created:
+        # Assign default role to the user
+        user_group,created = Group.objects.get_or_create(name='User')
+        if created:
+            instance.groups.add(user_group)
+            instance.save()
+        

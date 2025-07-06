@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from users.forms import SignUpModelForm,SignInModelForm
+from django.contrib.auth.models import User,Group
+from users.forms import SignUpModelForm,SignInModelForm,AssignRoleForm,CreateGroupForm
 from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -65,3 +65,43 @@ def activate_account(request, user_id, token):
     except User.DoesNotExist:
         messages.error(request, "User does not exist.")
         return redirect('sign-in')
+    
+def admin_dashboard(request):
+    users= User.objects.all()
+    return render(request, 'admin/dashboard.html',{'users': users})
+    # if request.user.is_authenticated and request.user.is_staff:
+    #     return render(request, 'admin/dashboard.html',{'users': users})
+    # else:
+    #     messages.error(request, "You do not have permission to access this page.")
+    #     return redirect('sign-in')
+
+def assign_role(request, user_id):
+    user = User.objects.get(pk=user_id)
+    form = AssignRoleForm()
+    if request.method == 'POST':
+        form= AssignRoleForm(request.POST)
+        if form.is_valid():
+            role = form.cleaned_data.get('role')
+            user.groups.clear() # Clear existing roles
+            user.groups.add(role) # Assign new role
+            messages.success(request, f"Role changed to {role} for {user.username}.")
+            return redirect('admin-dashboard')
+        
+    return render(request, 'admin/assign_role.html', {'user': user, 'form': form})
+
+def create_group(request):
+    form =CreateGroupForm()
+    if request.method == 'POST':
+        form = CreateGroupForm(request.POST)
+        if form.is_valid():
+            group = form.save()
+            messages.success(request, f"Group '{group.name}' created successfully.")
+            return redirect('create-group')
+        else:
+            messages.error(request, "Error creating group. Please try again.")
+
+    return render(request, 'admin/create_group.html', {'form': form})
+
+def group_list(request):
+    groups = Group.objects.all()
+    return render(request, 'admin/group_list.html', {'groups': groups})

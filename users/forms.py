@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django import forms 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Permission, Group
 import re
 from tasks.forms import StyledFormMixin
 
@@ -74,3 +74,28 @@ class SignInModelForm(StyledFormMixin,AuthenticationForm, ):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
+class AssignRoleForm(StyledFormMixin,forms.Form):
+    
+    role = forms.ModelChoiceField(
+        queryset= Group.objects.all(),
+        empty_label="Select Role",
+    )
+
+class CreateGroupForm(StyledFormMixin,forms.ModelForm):
+    permissions= forms.ModelMultipleChoiceField(
+        queryset=Permission.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Permissions"
+    )
+    class Meta:
+        model = Group
+        fields = ['name', 'permissions']
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if Group.objects.filter(name=name).exists():
+            raise forms.ValidationError("Group with this name already exists.")
+        return name
+ 
+       
