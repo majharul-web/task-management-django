@@ -55,8 +55,9 @@ def create_task(request):
     task_detail_form = TaskDetailModelForm()  
 
     if(request.method == 'POST'): # If the request is POST, we need to process the form data
-        task_form = TaskModelForm(request.POST)
-        task_detail_form = TaskDetailModelForm(request.POST)
+        task_form = TaskModelForm(request.POST)  
+        task_detail_form = TaskDetailModelForm(request.POST, request.FILES)
+        print("v",request.FILES)
         if task_form.is_valid() and task_detail_form.is_valid():
             task = task_form.save()
             task_detail = task_detail_form.save(commit=False)  

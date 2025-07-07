@@ -43,7 +43,7 @@ class TaskDetail(models.Model):
         on_delete=models.CASCADE,
         related_name='details',
     )
-    # assigned_to = models.CharField(max_length=100)
+    asset = models.ImageField(upload_to='tasks_asset/', blank=True, null=True)
     priority = models.CharField(max_length=2, choices=PRIORITY_OPTIONS, default=LOW)
     notes = models.TextField(blank=True, null=True)
     
