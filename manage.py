@@ -30,5 +30,6 @@ if __name__ == '__main__':
 # see dependencies: pip list
 # make migrations: python manage.py makemigrations
 # migrate database: python manage.py migrate
+# migrate specific app version: python manage.py migrate tasks 0003
 # run shell: python manage.py shell
 # run-server: python manage.py runserver

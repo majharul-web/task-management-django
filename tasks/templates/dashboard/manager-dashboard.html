@@ -20,7 +20,9 @@
    <div class="grid grid-cols-6 gap-4 p-4 items-center">
       <div class="flex items-center gap-2 col-span-2">
         <div class="w-2 h-2 rounded-full bg-green-500"></div>
-         <span>{{ task.title }}</span> 
+        <a href="{% url 'task-details' task.id %}" class="hover:underline">
+          {{ task.title }}
+        </a>  
       </div>
       <div class="flex items-center gap-2">
          {% if task.status == 'COMPLETED' %}

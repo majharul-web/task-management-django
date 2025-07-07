@@ -147,6 +147,14 @@ def view_tasks(request):
     }
     return render(request, 'view-tasks.html', context)
 
+@login_required
+@permission_required('tasks.view_task', login_url='no-permission')
+def task_details(request, id):
+    task = Task.objects.get(pk=id)  # Fetch the task details by ID          
+    context = {
+        'task': task
+    }
+    return render(request, 'task-details.html', context)
 
 def related_tasks(request):
     # tasks = Task.objects.all()  
