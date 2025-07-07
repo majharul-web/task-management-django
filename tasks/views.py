@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from tasks.forms import TaskModelForm,TaskDetailModelForm
-from tasks.models import Task,TaskDetail,Project,Employee
+from tasks.models import Task,TaskDetail,Project
 from datetime import date
 from django.db.models import Q,Count
 from django.contrib import messages
@@ -156,7 +156,7 @@ def task_details(request, id):
     }
     return render(request, 'task-details.html', context)
 
-def related_tasks(request):
+
     # tasks = Task.objects.all()  
     # tasks= Task.objects.select_related('details').all()
     # tasks= TaskDetail.objects.select_related('task').all()

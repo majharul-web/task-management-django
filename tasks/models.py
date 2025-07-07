@@ -4,14 +4,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Employee(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    # task_set
-    
-    def __str__(self):
-        return self.name
-
 class Task(models.Model):
     STATUS_CHOICES = [
         ('PENDING', 'Pending'),
