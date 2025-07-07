@@ -16,7 +16,7 @@ def is_manager(user):
 def is_employee(user):
     return user.groups.filter(name='Employee').exists()
 
-@user_passes_test(is_manager, login_url='no-permission')
+# @user_passes_test(is_manager, login_url='no-permission')
 def manager_dashboard(request):
     type= request.GET.get('type', 'all')  # Get the type from query parameters, default to 'all'
     print(type)

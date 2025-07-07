@@ -1,15 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-</head>
-  <body>
-    <header class="bg-white shadow-md">
-      <nav class="container mx-auto px-6 py-3">
+
+<header class="bg-white shadow-md">
+  <nav class="container mx-auto px-6 py-3 ">
         <div class="flex justify-between items-center">
           <a href="index.html" class="text-xl font-bold text-gray-800"
             >Taskify</a
@@ -21,13 +12,13 @@
               >Dashboard</a
             >
             <a href="#"class="text-gray-600 hover:text-gray-800">Tasks</a>
-            <a href="{% url 'group-list' %}" class="text-gray-600 hover:text-gray-800"
-              >Groups</a
+            <a href="{% url 'view-tasks' %}" class="text-gray-600 hover:text-gray-800"
+              >Task List</a
             >
             <a
-              href="{% url "create-group" %}"
+              href="{% url "create-task" %}"
               class="text-gray-600 hover:text-gray-800"
-              >Create Group</a
+              >Create Task</a
             >
           </div>
           <div class="flex items-center">
@@ -91,23 +82,12 @@
           <a href="#"class="block py-2 text-gray-600 hover:text-gray-800"
             >Tasks</a
           >
-          <a href="{% url 'group-list' %}" class="block py-2 text-gray-600 hover:text-gray-800"
-            >Groups</a
+          <a href="{% url 'view-tasks' %}" class="block py-2 text-gray-600 hover:text-gray-800"
+            >Task List</a
           >
-          <a href="{% url 'create-group' %}" class="block py-2 text-gray-600 hover:text-gray-800"
-            >Create Group</a
+          <a href="{% url 'create-task' %}" class="block py-2 text-gray-600 hover:text-gray-800"
+            >Create Task</a
           >
         </div>
-      </nav>
-    </header>
-
-    <main>
-      {% block content %}
-      {% include "admin/user_list.html" %}
-      
-      {% endblock content %}
-    </main>
-
-    
-  </body>
-</html>
+  </nav>
+</header>

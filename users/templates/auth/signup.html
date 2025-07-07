@@ -1,15 +1,7 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-</head>
-<body class="bg-gray-100">
-    <div class="w-[600px] mx-auto mt-10 p-5 bg-white shadow-md rounded-lg">
-        <h1 class="text-center text-xl font-bold">Welcome to Authentication System</h1>
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="max-w-[600px] mx-5 md:mx-auto  my-12 p-5 bg-white shadow-md rounded-lg">
         <div class="mt-5">
             {% if form.non_field_errors %}
                 {% for error in form.non_field_errors %}
@@ -39,5 +31,4 @@
             </form>
         </div>
     </div>
-</body>
-</html>
+{% endblock content %}
