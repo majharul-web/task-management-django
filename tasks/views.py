@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404
+from users.views import is_admin
 
 # Create your views here.
 
@@ -181,3 +182,13 @@ def task_details(request, id):
     return render(request, 'task-details.html', context)
 
 
+@login_required
+def dashboard(request):
+    pass
+    if is_manager(request.user):
+        return redirect('manager-dashboard')
+    elif is_employee(request.user):
+        return redirect('employee-dashboard')
+    elif is_admin(request.user):
+        return redirect('manager-dashboard')
+    return redirect('no-permission')
