@@ -70,6 +70,7 @@ def create_task(request):
     context= {
         'task_form': task_form,
         'task_detail_form': task_detail_form,
+        'is_update': False,
     }
     return render(request, 'task-form.html', context)
 
@@ -84,7 +85,7 @@ def update_task(request,id):
 
     if(request.method == 'POST'): # If the request is POST, we need to process the form data
         task_form = TaskModelForm(request.POST, instance=task)
-        task_detail_form = TaskDetailModelForm(request.POST, instance=task.details)
+        task_detail_form = TaskDetailModelForm(request.POST,request.FILES, instance=task.details)
         if task_form.is_valid() and task_detail_form.is_valid():
             task = task_form.save()
             task_detail = task_detail_form.save(commit=False)  
@@ -97,6 +98,7 @@ def update_task(request,id):
     context= {
         'task_form': task_form,
         'task_detail_form': task_detail_form,
+        'is_update': True,
     }
     return render(request, 'task-form.html', context)
 

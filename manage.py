@@ -31,5 +31,7 @@ if __name__ == '__main__':
 # make migrations: python manage.py makemigrations
 # migrate database: python manage.py migrate
 # migrate specific app version: python manage.py migrate tasks 0003
+# seed data with faker: python manage.py populate_db
+# create superuser: python manage.py createsuperuser
 # run shell: python manage.py shell
 # run-server: python manage.py runserver

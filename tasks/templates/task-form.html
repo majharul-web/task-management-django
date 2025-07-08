@@ -1,24 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Create Task{% endblock title %}
+
+{% block title %}
+  {% if is_update %}Update Task{% else %}Create Task{% endif %}
+{% endblock title %}
+
 {% block content %}
+<div class="w-1/2 mx-auto mt-8 my-8">
 
-   <div class="w-1/2 mx-auto mt-8 my-8">
-       <div>
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="px-2 py-1 {% if 'success' in message.tags %}bg-green-500{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+  {% comment %} Messages {% endcomment %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="px-2 py-1 {% if 'success' in message.tags %}bg-green-500{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
 
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ task_form }}
-            {{ task_detail_form }}
-            <br>
-            <button class="btn-primary" type="submit">Create Task</button>
-        </form>
-   </div>
+  {% comment %} Form {% endcomment %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ task_form }}
+    {{ task_detail_form }}
+    <br>
+    <button class="btn-primary" type="submit">
+      {% if is_update %}Update Task{% else %}Create Task{% endif %}
+    </button>
+  </form>
+</div>
 {% endblock content %}

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
  {% block title %}{{task.title}} - Task Details{% endblock %} 
 {% block content %}
-<div class="my-12 px-6">
+<div class="py-12 px-6">
   <h1 class="text-3xl font-bold mb-6">{{task.title}}</h1>
 
   <!-- Navigation Tabs -->
-  <div class="flex gap-4 mb-8 border-b">
+  <div class="flex gap-4 mb-8 border-b pb-2">
     <button class="px-4 py-2 bg-blue-50 text-blue-600 rounded-t-lg flex items-center gap-2">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -64,11 +64,11 @@
             {% endfor %}
           </div>
         </div>
-        <div>
-          <a href='{% url "update-task" task.id %}' class="px-2 py-1 bg-green-500">Edit</a>
+        <div class="flex gap-x-5 items-center">
+          <a href='{% url "update-task" task.id %}' class="btn-primary">Edit</a>
           <form action='{% url "delete-task" task.id %}' method="POST">
             {% csrf_token %}
-            <button class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600" type="submit">
+            <button class="btn-danger" type="submit">
               Delete Task
             </button>
           </form>
@@ -88,11 +88,16 @@
       <div class="bg-white p-6 rounded-lg shadow-sm">
         <h2 class="text-xl font-bold mb-4">ASSETS</h2>
         <div class="space-y-4">
-          <img
-            src="{{task.details.asset.url}}"
-            alt="Task Manager App Screenshot 1"
-            class="w-full rounded-lg"
-          />
+          {% if task.details.asset %}
+            <img
+              src="{{ task.details.asset.url }}"
+              alt="Task Asset"
+              class="w-full rounded-lg"
+            />
+          {% else %}
+            <p class="text-gray-500 italic">No asset found!</p>
+          {% endif %}
+
         </div>
       </div>
     </div>
