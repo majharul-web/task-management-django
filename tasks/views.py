@@ -7,6 +7,7 @@ from django.db.models import Q,Count
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -105,14 +106,21 @@ def update_task(request,id):
 @login_required
 @permission_required('tasks.delete_task', login_url='no-permission')
 def delete_task(request, id):
-    task = Task.objects.get(pk=id)  # Fetch the task to be deleted
+    task = get_object_or_404(Task, pk=id)
+
     if request.method == 'POST':
-        task.delete()  # Delete the task
+        # Optional: delete related detail if it exists
+        try:
+            task.details.delete()
+        except TaskDetail.DoesNotExist:
+            pass  # No detail to delete
+
+        task.delete()
         messages.success(request, "Task deleted successfully!")
         return redirect('manager-dashboard')
-    else:
-        messages.error(request, "Invalid request method. Please use POST to delete a task.")
-        return redirect('manager-dashboard')  
+
+    messages.error(request, "Invalid request method.")
+    return redirect('manager-dashboard')
 
 @login_required
 @permission_required('tasks.view_task', login_url='no-permission')
@@ -153,33 +161,23 @@ def view_tasks(request):
 @login_required
 @permission_required('tasks.view_task', login_url='no-permission')
 def task_details(request, id):
-    task = Task.objects.get(pk=id)  # Fetch the task details by ID          
+    task = Task.objects.get(pk=id)  
+    status_choices = Task.STATUS_CHOICES  
+    
+    if request.method == 'POST':
+        new_status = request.POST.get('task_status')
+        if new_status:
+            task.status = new_status
+            task.save()
+            messages.success(request, "Task status updated successfully!")
+            return redirect('task-details', id=task.id)
+        else:
+            messages.error(request, "Invalid status selection.")
+            return redirect('task-details', id=task.id)
     context = {
-        'task': task
+        'task': task,
+        'status_choices': status_choices,
     }
     return render(request, 'task-details.html', context)
 
 
-    # tasks = Task.objects.all()  
-    # tasks= Task.objects.select_related('details').all()
-    # tasks= TaskDetail.objects.select_related('task').all()
-    employee = Employee.objects.get(pk=1)
-    tasks = employee.tasks.all()
-
-    for task in tasks:
-        print(task.title, task.description, task.due_date)
-        
-    # project_task=Task.objects.select_related('project').all()  
-    # project_task=Project.objects.select_related('tasks_set').all()  #got error
-    project_task=Project.objects.prefetch_related('task_set').all()  # Using pre
-    
-    # 
-    tasks_employee= Task.objects.prefetch_related('assigned_to').all()
-    # tasks_employee= Employee.objects.prefetch_related('tasks').all()
-
-    context = {
-        'tasks': tasks,
-        'project_task': project_task,
-        'tasks_employee': tasks_employee,
-    }
-    return render(request, 'related-tasks.html', context)
