@@ -88,18 +88,25 @@ WSGI_APPLICATION = 'task_management.wsgi.application'
 # }
 
 # for postgresql database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default=''),
-        'USER': config('DB_USER', default=''),
-        'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default=''),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME', default=''),
+#         'USER': config('DB_USER', default=''),
+#         'PASSWORD': config('DB_PASSWORD', default=''),
+#         'HOST': config('DB_HOST', default='localhost'),
+#         'PORT': config('DB_PORT', default=''),
+#     }
+# }
 
 # for postgresql database with dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DB_REMOTE', default=''),
+        conn_max_age=600
+    )
+}
 
 # DATABASES = {
 #     'default': dj_database_url.config(

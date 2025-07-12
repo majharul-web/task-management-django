@@ -31,6 +31,7 @@ def populate_db():
             email=fake.email(),
             first_name=fake.first_name(),
             last_name=fake.last_name(),
+            is_active=True,
             password='Admin@1#%'  # ✅ Set fixed password
         )
         for _ in range(10)
