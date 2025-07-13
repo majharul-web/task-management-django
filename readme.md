@@ -11,3 +11,5 @@
 9. [django signals](https://docs.djangoproject.com/en/5.2/topics/signals/)
 10. [django email sending](https://docs.djangoproject.com/en/5.2/topics/email/)
 11. [django permissions and authorization](https://docs.djangoproject.com/en/5.2/topics/auth/default/#permissions-and-authorization)
+12. [class-based views](https://docs.djangoproject.com/en/5.2/topics/class-based-views/)
+13. [classy class-based views](https://ccbv.co.uk/)

@@ -9,9 +9,25 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404
 from users.views import is_admin
+from django.views import View
+from django.utils.decorators import method_decorator
 
-# Create your views here.
 
+create_task_decorators = [login_required, permission_required('tasks.add_task', login_url='no-permission')]
+# Class based views example
+class GreetingView(View):
+    message="Hello, this is a class-based view!"
+    def get(self, request):
+        return HttpResponse(self.message)
+
+class HiGreetingView(View):
+    message="Hi, this is another class-based view!"
+    def get(self, request):
+        return HttpResponse(self.message)
+
+
+
+# helper function
 def is_manager(user):
     return user.groups.filter(name='Manager').exists()
 
@@ -75,6 +91,34 @@ def create_task(request):
         'is_update': False,
     }
     return render(request, 'task-form.html', context)
+
+
+# Create task class based view example
+@method_decorator(create_task_decorators, name='dispatch')
+class CreateTaskView(View):
+    template_name = 'task-form.html'
+
+    def get(self, request):
+        task_form = TaskModelForm() 
+        task_detail_form = TaskDetailModelForm()  
+        context = {
+            'task_form': task_form,
+            'task_detail_form': task_detail_form,
+            'is_update': False,
+        }
+        return render(request, 'task-form.html', context)
+
+    def post(self, request):
+        task_form = TaskModelForm(request.POST)  
+        task_detail_form = TaskDetailModelForm(request.POST, request.FILES)
+        if task_form.is_valid() and task_detail_form.is_valid():
+            task = task_form.save()
+            task_detail = task_detail_form.save(commit=False)  
+            task_detail.task = task  
+            task_detail.save()  
+            messages.success(request, "Task created successfully!")
+            return redirect('create-task')
+ 
 
 @login_required
 @permission_required('tasks.change_task', login_url='no-permission')
