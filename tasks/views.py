@@ -13,7 +13,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic.base import ContextMixin
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 create_task_decorators = [login_required, permission_required('tasks.add_task', login_url='no-permission')]
@@ -243,6 +243,30 @@ def task_details(request, id):
     }
     return render(request, 'task-details.html', context)
 
+class DetailsView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    permission_required = 'tasks.view_task'
+    login_url = 'sign-in'
+    pk_url_kwarg = 'id'  # Use 'id' as the URL parameter for the task ID
+    model = Task
+    template_name = 'task-details.html'
+    context_object_name = 'task'
+    
+    def get_context_data(self, **kwargs) :
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Task.STATUS_CHOICES
+        return context
+    def post(self, request, *args, **kwargs):
+        task = self.get_object()
+        new_status = request.POST.get('task_status')
+        if new_status:
+            task.status = new_status
+            task.save()
+            messages.success(request, "Task status updated successfully!")
+            return redirect('task-details', id=task.id)
+        else:
+            messages.error(request, "Invalid status selection.")
+            return redirect('task-details', id=task.id)
+    
 
 @login_required
 def dashboard(request):
