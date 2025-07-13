@@ -11,6 +11,8 @@ from django.shortcuts import get_object_or_404
 from users.views import is_admin
 from django.views import View
 from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic.base import ContextMixin
 
 
 create_task_decorators = [login_required, permission_required('tasks.add_task', login_url='no-permission')]
@@ -94,18 +96,21 @@ def create_task(request):
 
 
 # Create task class based view example
-@method_decorator(create_task_decorators, name='dispatch')
-class CreateTaskView(View):
+# @method_decorator(create_task_decorators, name='dispatch')
+class CreateTaskView(LoginRequiredMixin,PermissionRequiredMixin,ContextMixin, View):
+    permission_required = 'tasks.add_task'
+    login_url = 'sign-in'  
     template_name = 'task-form.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['task_form'] = kwargs.get('task_form', TaskModelForm())
+        context['task_detail_form'] = kwargs.get('task_detail_form', TaskDetailModelForm())
+        context['is_update'] = False
+        return context
 
     def get(self, request):
-        task_form = TaskModelForm() 
-        task_detail_form = TaskDetailModelForm()  
-        context = {
-            'task_form': task_form,
-            'task_detail_form': task_detail_form,
-            'is_update': False,
-        }
+        context = self.get_context_data()
         return render(request, 'task-form.html', context)
 
     def post(self, request):
@@ -117,7 +122,9 @@ class CreateTaskView(View):
             task_detail.task = task  
             task_detail.save()  
             messages.success(request, "Task created successfully!")
-            return redirect('create-task')
+            # return redirect('create-task')
+            context = self.get_context_data(task_form=task_form, task_detail_form=task_detail_form)
+            return render(request, 'task-form.html', context)
  
 
 @login_required
