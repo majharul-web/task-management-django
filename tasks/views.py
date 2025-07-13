@@ -13,6 +13,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic.base import ContextMixin
+from django.views.generic import ListView
 
 
 create_task_decorators = [login_required, permission_required('tasks.add_task', login_url='no-permission')]
@@ -125,7 +126,17 @@ class CreateTaskView(LoginRequiredMixin,PermissionRequiredMixin,ContextMixin, Vi
             # return redirect('create-task')
             context = self.get_context_data(task_form=task_form, task_detail_form=task_detail_form)
             return render(request, 'task-form.html', context)
- 
+
+class ProjectView(LoginRequiredMixin, PermissionRequiredMixin, ListView, View):
+    permission_required = 'tasks.view_project'
+    login_url = 'sign-in'
+
+    model = Project
+    context_object_name = 'projects'
+    template_name = 'view-projects.html'
+
+    def get_queryset(self):
+        return Project.objects.annotate(task_count=Count('task')).order_by('-task_count')
 
 @login_required
 @permission_required('tasks.change_task', login_url='no-permission')

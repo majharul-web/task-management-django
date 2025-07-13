@@ -1,0 +1,24 @@
+{% extends "dashboard/dashboard.html" %}
+{% block title %}Manager Dashboard{% endblock title %}
+{% block tasks %}
+{% comment %}  Task List   {% endcomment %}
+
+<h2 class="text-lg font-semibold px-6 py-3">Projects</h2>
+
+<div class="bg-white rounded-xl shadow-sm">
+   
+   <ul class="divide-y divide-gray-200">
+       {% for project in projects %}
+           <li class="py-4 px-6">
+               <h3 class="text-md font-medium">{{ project.name }}</h3>
+               <p class="text-sm text-gray-500">{{ project.description }}</p>
+                <div class="mt-2">
+                    <span class="text-sm text-gray-600">Tasks: {{ project.task_count }}</span>
+                    <br>
+                    <a href="#" class="text-blue-500 hover:underline ml-2">View Details</a>
+                </div>
+           </li>
+       {% endfor %}
+   </ul>
+</div>
+{% endblock tasks %}
