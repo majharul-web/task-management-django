@@ -1,10 +1,15 @@
 from django.urls import path
-from users.views import sign_up, sign_in, sign_out,activate_account, admin_dashboard,assign_role,create_group,group_list
+from users.views import sign_up, sign_in, sign_out,activate_account, admin_dashboard,assign_role,create_group,group_list,CustomLoginView,CustomProfileView
+from django.contrib.auth.views import LogoutView
+
 
 urlpatterns = [
     path('sign-up/', sign_up, name='sign-up'),
-    path('sign-in/', sign_in, name='sign-in'),
-    path('sign-out/', sign_out, name='sign-out'),
+    path('sign-in/', CustomLoginView.as_view(template_name='auth/signin.html'), name='sign-in'),
+    path('profile/', CustomProfileView.as_view(), name='profile'),
+    # path('sign-in/', sign_in, name='sign-in'),
+    path('sign-out/', LogoutView.as_view() , name='sign-out'),
+    # path('sign-out/', sign_out, name='sign-out'),
     path('activate/<int:user_id>/<str:token>/', activate_account, name='activate-account'),
     path('admin/dashboard/', admin_dashboard, name='admin-dashboard'),
     path('admin/assign-role/<int:user_id>/', assign_role, name='assign-role'),

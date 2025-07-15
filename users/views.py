@@ -9,6 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Prefetch
+from django.contrib.auth.views import LoginView, TemplateView
 
 # Create your views here.
 
@@ -45,6 +46,29 @@ def sign_in(request):
             print("Invalid credentials")
 
     return render(request, 'auth/signin.html', {"form": form})
+
+# Customized login view
+class CustomLoginView(LoginView):
+    form_class = SignInModelForm
+    
+    def get_success_url(self):
+        next_url= self.request.GET.get('next')
+        
+        return next_url if next_url else super().get_success_url()
+
+# Profile view
+class CustomProfileView(TemplateView):
+    template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['username'] = user.username
+        context['email'] = user.email
+        context['name'] = user.get_full_name() or user.username
+        context['member_since'] = user.date_joined
+        context['last_login'] = user.last_login
+        return context
 
 
 @login_required
