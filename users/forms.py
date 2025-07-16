@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User,Permission, Group
 import re
 from tasks.forms import StyledFormMixin
+from django.contrib.auth.views import PasswordChangeForm
 
 class SignUpForm(UserCreationForm):
     class Meta:
@@ -98,4 +99,6 @@ class CreateGroupForm(StyledFormMixin,forms.ModelForm):
             raise forms.ValidationError("Group with this name already exists.")
         return name
  
-       
+
+class CustomPasswordChangeForm(StyledFormMixin, PasswordChangeForm):
+    pass
