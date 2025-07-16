@@ -5,35 +5,36 @@ from tasks.models import Task, TaskDetail
 class StyledFormMixin:
     """ Mixing to apply style to form field"""
 
-    default_classes = "border-2 border-gray-300 w-full p-3 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500"
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
+    default_classes = "border border-blue-500 w-full px-4 py-2 rounded-lg shadow-sm ring-blue-500 focus:outline-none focus:ring-2 focus:ring-opacity-50"
 
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TextInput):
                 field.widget.attrs.update({
-                    'class': self.default_classes,
+                    'class': 'form-input',
                     'placeholder': f"Enter {field.label.lower()}"
                 })
             elif isinstance(field.widget, forms.Textarea):
                 field.widget.attrs.update({
-                    'class': f"{self.default_classes} resize-none",
+                    'class': "form-input resize-none",
                     'placeholder':  f"Enter {field.label.lower()}",
                     'rows': 5
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
-                print("Inside Date")
                 field.widget.attrs.update({
-                    "class": "border-2 border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500"
+                    "class": "border border-blue-500 px-4 py-2 rounded-lg shadow-sm ring-blue-500 focus:outline-none focus:ring-2 focus:ring-opacity-50"
                 })
             elif isinstance(field.widget, forms.CheckboxSelectMultiple):
-                print("Inside checkbox")
                 field.widget.attrs.update({
                     'class': "space-y-2"
                 })
             else:
-                print("Inside else")
                 field.widget.attrs.update({
-                    'class': self.default_classes
+                    'class': 'form-input'
                 })
 
 class TaskModelForm(StyledFormMixin, forms.ModelForm):
@@ -70,17 +71,11 @@ class TaskModelForm(StyledFormMixin, forms.ModelForm):
         #     ),
         # }
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()   
+    
 
 
 class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = TaskDetail
-        fields = ['priority', 'notes']
-        
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
+        fields = ['priority','asset', 'notes']
+
