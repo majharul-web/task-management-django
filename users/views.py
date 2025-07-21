@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User,Group
-from users.forms import SignUpModelForm,SignInModelForm,AssignRoleForm,CreateGroupForm,CustomPasswordChangeForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm
+from django.contrib.auth.models import Group
+from users.forms import SignUpModelForm,SignInModelForm,AssignRoleForm,CreateGroupForm,CustomPasswordChangeForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm,EditProfileForm
 from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -9,14 +9,32 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Prefetch
-from django.contrib.auth.views import LoginView, TemplateView,PasswordChangeView,PasswordResetView,PasswordResetConfirmView
+from django.contrib.auth.views import LoginView,PasswordChangeView,PasswordResetView,PasswordResetConfirmView
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView, UpdateView
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your views here.
 
 def is_admin(user):
     # return user.is_authenticated and user.is_staff
     return user.groups.filter(name='Admin').exists()
+
+
+class EditProfileView(UpdateView):
+    model = User
+    form_class = EditProfileForm
+    template_name = 'accounts/update_profile.html'
+    context_object_name = 'form'
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('profile')
 
 def sign_up(request):
     form = SignUpModelForm()
@@ -69,6 +87,8 @@ class CustomProfileView(TemplateView):
         context['name'] = user.get_full_name() or user.username
         context['member_since'] = user.date_joined
         context['last_login'] = user.last_login
+        context['bio'] = user.bio
+        context['profile_image'] = user.profile_image
         return context
     
 class CustomPasswordChangeView(PasswordChangeView):

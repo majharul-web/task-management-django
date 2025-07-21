@@ -21,7 +21,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-# default user credentials: Majharul@1#%
+# default user credentials: Majharul@1#% Admin@1#%
 
 # create a virtual environment: python -m venv venv
 # linux venv activate: source venv/bin/activate

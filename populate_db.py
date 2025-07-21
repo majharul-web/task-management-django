@@ -8,7 +8,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'task_management.settings')
 django.setup()
 
 from tasks.models import Project, Task, TaskDetail
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 def populate_db():
     fake = Faker()
@@ -32,7 +34,7 @@ def populate_db():
             first_name=fake.first_name(),
             last_name=fake.last_name(),
             is_active=True,
-            password='Admin@1#%'  # ✅ Set fixed password
+            password='Majharul@1#%'  # ✅ Set fixed password
         )
         for _ in range(10)
     ]
