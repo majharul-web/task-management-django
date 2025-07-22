@@ -47,7 +47,7 @@
                 class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden"
               >
                 <a
-                  href="{% url 'admin-dashboard' %}"
+                  href="{% url 'dashboard' %}"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >Dashboard</a
                 >
@@ -59,7 +59,7 @@
                 <form method="post" action="{% url 'sign-out' %}">
                   {% csrf_token %}
                   <button
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    class="block  px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Logout
                   </button>
@@ -113,6 +113,25 @@
       {% endblock content %}
     </main>
 
-    
+    <script>
+      document
+        .getElementById("menu-toggle")
+        .addEventListener("click", function () {
+          document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
+
+      document
+        .getElementById("user-menu-button")
+        .addEventListener("click", function () {
+          document.getElementById("user-menu").classList.toggle("hidden");
+        });
+
+      // Close the dropdown when clicking outside
+      window.addEventListener("click", function (e) {
+        if (!document.getElementById("user-menu-button").contains(e.target)) {
+          document.getElementById("user-menu").classList.add("hidden");
+        }
+      });
+    </script>
   </body>
 </html>

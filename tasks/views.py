@@ -311,5 +311,5 @@ def dashboard(request):
     elif is_employee(request.user):
         return redirect('employee-dashboard')
     elif is_admin(request.user):
-        return redirect('manager-dashboard')
+        return redirect('admin-dashboard')
     return redirect('no-permission')

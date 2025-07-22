@@ -1,6 +1,6 @@
 from django.urls import path
-from users.views import sign_up, sign_in, sign_out,activate_account, admin_dashboard,assign_role,create_group,group_list,CustomLoginView,CustomProfileView,CustomPasswordChangeView,CustomPasswordResetView,CustomPasswordResetConfirmView,EditProfileView
-from django.contrib.auth.views import LogoutView,PasswordChangeView, PasswordChangeDoneView 
+from users.views import sign_up,activate_account, admin_dashboard,CustomLoginView,CustomProfileView,CustomPasswordChangeView,CustomPasswordResetView,CustomPasswordResetConfirmView,EditProfileView,GroupListView,CreateGroupView,AssignRoleView
+from django.contrib.auth.views import LogoutView,PasswordChangeView, PasswordChangeDoneView
 
 
 urlpatterns = [
@@ -12,10 +12,10 @@ urlpatterns = [
     # path('sign-out/', sign_out, name='sign-out'),
     path('activate/<int:user_id>/<str:token>/', activate_account, name='activate-account'),
     path('admin/dashboard/', admin_dashboard, name='admin-dashboard'),
-    path('admin/assign-role/<int:user_id>/', assign_role, name='assign-role'),
-    path('admin/create-group/', create_group, name='create-group'),
-    path('admin/group-list/', group_list, name='group-list'),
-    
+    path('admin/assign-role/<int:user_id>/', AssignRoleView.as_view(), name='assign-role'),
+    path('admin/create-group/', CreateGroupView.as_view(), name='create-group'),
+    path('admin/group-list/', GroupListView.as_view(), name='group-list'),
+
     path('password-change/', CustomPasswordChangeView.as_view(template_name="accounts/password_change.html"), name='password-change'),
     path('password-change/done/', PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'), name='password_change_done'),
     path('password-reset/', CustomPasswordResetView.as_view(), name='password_reset'),
