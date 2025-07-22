@@ -39,20 +39,26 @@ class EditProfileView(UpdateView):
         form.save()
         return redirect('profile')
 
-def sign_up(request):
-    form = SignUpModelForm()
-    if request.method == 'POST':
+class SignUpView(View):
+    template_name = 'auth/signup.html'
+
+    def get(self, request):
+        form = SignUpModelForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
         form = SignUpModelForm(request.POST)
         if form.is_valid():
-            user=form.save(commit=False)
+            user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
-            user.is_active = False 
+            user.is_active = False  # wait for activation
             user.save()
             messages.success(request, "Account created successfully! Please check your email for activation link.")
             return redirect('sign-in')
         else:
-            print("Form is not valid")
-    return render(request, 'auth/signup.html', {"form": form})
+            messages.error(request, "Please correct the errors below.")
+            
+        return render(request, self.template_name, {'form': form})
 
 
 
@@ -111,41 +117,45 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         response = super().form_valid(form)
         messages.success(self.request, "Your password has been reset successfully. You can now sign in.")
         return response
+    
+class ActivateAccountView(View):
+    def get(self, request, user_id, token):
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            messages.error(request, "User does not exist.")
+            return redirect('sign-in')
 
-
-
-
-def activate_account(request, user_id, token):
-    try:
-        user = User.objects.get(pk=user_id)
         if user.is_active:
             messages.info(request, "Account is already activated.")
             return redirect('sign-in')
-        
+
         if default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
             messages.success(request, "Account activated successfully! You can now sign in.")
-            return redirect('sign-in')
         else:
             messages.error(request, "Invalid activation link.")
-            return redirect('sign-in')
-    except User.DoesNotExist:
-        messages.error(request, "User does not exist.")
+        
         return redirect('sign-in')
 
-@user_passes_test(is_admin, login_url='no-permission')   
-def admin_dashboard(request):
-    users = User.objects.prefetch_related(
-        Prefetch('groups', queryset=Group.objects.all(), to_attr='all_groups')  
-    )
+class AdminDashboardView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'auth.view_user' 
+    login_url = 'sign-in'
+    template_name = 'admin/dashboard.html'
 
-    for user in users:
-        if user.all_groups:
-            user.group_name = user.all_groups[0].name
-        else:
-            user.group_name = 'No Group Assigned'
-    return render(request, 'admin/dashboard.html',{'users': users})
+    def get(self, request):
+        users = User.objects.prefetch_related(
+            Prefetch('groups', queryset=Group.objects.all(), to_attr='all_groups')
+        )
+
+        for user in users:
+            if user.all_groups:
+                user.group_name = user.all_groups[0].name
+            else:
+                user.group_name = 'No Group Assigned'
+
+        return render(request, self.template_name, {'users': users})
 
 
 class AssignRoleView(LoginRequiredMixin, PermissionRequiredMixin, View):

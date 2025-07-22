@@ -1,17 +1,17 @@
 from django.urls import path
-from users.views import sign_up,activate_account, admin_dashboard,CustomLoginView,CustomProfileView,CustomPasswordChangeView,CustomPasswordResetView,CustomPasswordResetConfirmView,EditProfileView,GroupListView,CreateGroupView,AssignRoleView
+from users.views import CustomLoginView,CustomProfileView,CustomPasswordChangeView,CustomPasswordResetView,CustomPasswordResetConfirmView,EditProfileView,GroupListView,CreateGroupView,AssignRoleView,SignUpView,ActivateAccountView,AdminDashboardView
 from django.contrib.auth.views import LogoutView,PasswordChangeView, PasswordChangeDoneView
 
 
 urlpatterns = [
-    path('sign-up/', sign_up, name='sign-up'),
+    path('sign-up/', SignUpView.as_view(), name='sign-up'),
     path('sign-in/', CustomLoginView.as_view(template_name='auth/signin.html'), name='sign-in'),
     path('profile/', CustomProfileView.as_view(), name='profile'),
     # path('sign-in/', sign_in, name='sign-in'),
     path('sign-out/', LogoutView.as_view() , name='sign-out'),
     # path('sign-out/', sign_out, name='sign-out'),
-    path('activate/<int:user_id>/<str:token>/', activate_account, name='activate-account'),
-    path('admin/dashboard/', admin_dashboard, name='admin-dashboard'),
+    path('activate/<int:user_id>/<str:token>/', ActivateAccountView.as_view(), name='activate-account'),
+    path('admin/dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
     path('admin/assign-role/<int:user_id>/', AssignRoleView.as_view(), name='assign-role'),
     path('admin/create-group/', CreateGroupView.as_view(), name='create-group'),
     path('admin/group-list/', GroupListView.as_view(), name='group-list'),
