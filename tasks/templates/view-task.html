@@ -1,0 +1,139 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link rel="stylesheet" href="{% static '/css/output.css' %}">
+</head>
+<body>
+    <div class="container mx-auto pt-10 pb-10">
+        <h1 class="text-2xl font-bold mb-4">Task List ({{ count_all_tasks }})</h1>
+        <ul class="list-inside list-disc">
+            {% for task in tasks %}
+                <li>
+                    <strong>{{ task.title }}</strong> - {{ task.status }}
+                    <p>{{ task.description }}</p>
+                </li>
+            {% empty %}
+                <li>No tasks available.</li>
+            {% endfor %}
+        </ul>
+
+        {% comment %} Display specific task {% endcomment %}
+        {% if specific_task %}
+            <h2 class="text-xl font-semibold mt-6">Specific Task</h2>
+            <div class="bg-gray-100 p-4 rounded">
+                <strong>{{ specific_task.title }}</strong> - {{ specific_task.status }}
+                <p>{{ specific_task.description }}</p>
+            </div>
+        {% endif %}
+
+        {% comment %} Display first task {% endcomment %}
+        {% if first_task %}
+            <h2 class="text-xl font-semibold mt-6">First Task</h2>
+            <div class="bg-gray-100 p-4 rounded">
+                <strong>{{ first_task.title }}</strong> - {{ first_task.status }}
+                <p>{{ first_task.description }}</p>
+            </div>
+        {% endif %}
+
+        {% comment %} Display last task {% endcomment %}
+        {% if last_task %}
+            <h2 class="text-xl font-semibold mt-6">Last Task</h2>
+            <div class="bg-gray-100 p-4 rounded">
+                <strong>{{ last_task.title }}</strong> - {{ last_task.status }}
+                <p>{{ last_task.description }}</p>
+            </div>
+        {% endif %}
+
+        {% comment %} Display tasks by status {% endcomment %}
+        {% if tasks_by_status %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks by Status</h2>
+            <ul class="list-inside list-disc">
+                {% for task in tasks_by_status %}
+                    <li>
+                        <strong>{{ task.title }}</strong> - {{ task.status }}
+                        <p>{{ task.description }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% comment %} Display tasks by priority {% endcomment %}
+        {% if tasks_by_priority %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks by Priority</h2>
+            <ul class="list-inside list-disc">
+                {% for task in tasks_by_priority %}
+                    <li>
+                        <strong>{{ task.task }}</strong> - {{ task.priority }}
+                        <p>{{ task.task.note }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% comment %} Display tasks using AND with contains {% endcomment %}
+        {% if filter_task_using_and_contains %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks Using AND with Contains</h2>
+            <ul class="list-inside list-disc">
+                {% for task in filter_task_using_and_contains %}
+                    <li>
+                        <strong>{{ task.title }}</strong> - {{ task.status }}
+                        <p>{{ task.description }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% comment %} Display tasks using OR with contains {% endcomment %}
+        {% if filter_task_using_or %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Tasks Using OR with Contains</h2>
+            <ul class="list-inside list-disc">
+                {% for task in filter_task_using_or %}
+                    <li>
+                        <strong>{{ task.title }}</strong> - {{ task.status }}
+                        <p>{{ task.description }}</p>
+                    </li>
+                {% empty %}
+                    <li>No tasks available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        
+
+        {% comment %} Display check if exists {% endcomment %}
+        {% if check_is_exists %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Check Exists</h2>
+            <p>There is at least one task containing 'urgent' in the title.</p>
+        {% else %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Check Exists</h2>
+            <p>No tasks contain 'urgent' in the title.</p>
+        {% endif %}
+
+
+        {% comment %} Display task count in each project {% endcomment %}
+        {% if task_count_in_project %}
+            <h2 class="text-xl font-semibold mt-6 mb-4">Task Count in Each Project</h2>
+            <ul class="list-inside list-disc">
+                {% for project in task_count_in_project %}
+                    <li>
+                        <strong>{{ project.name }}</strong> - {{ project.task_count }} tasks
+                    </li>
+                {% empty %}
+                    <li>No projects available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
